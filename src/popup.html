@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header>
+      <strong data-i18n="popupPostTitle"></strong>
+      <button type="button" id="options" class="link" data-i18n="popupOptions"></button>
+    </header>
+
+    <section id="open-section" hidden>
+      <button type="button" id="open-in-notedeck" class="primary" data-i18n="popupOpenInNoteDeck"></button>
+    </section>
+
+    <textarea id="text" rows="6" aria-label="text"></textarea>
+    <div class="row">
+      <button type="button" id="use-page" class="link" data-i18n="popupUsePage"></button>
+      <button type="button" id="use-selection" class="link" data-i18n="popupUseSelection"></button>
+    </div>
+
+    <div class="row">
+      <button type="button" id="open-form" class="primary" data-i18n="popupOpenPostForm"></button>
+    </div>
+
+    <details id="direct">
+      <summary data-i18n="popupPost"></summary>
+      <p id="no-token" class="muted" hidden data-i18n="popupNoToken"></p>
+      <div id="direct-form" hidden>
+        <label for="account"><span data-i18n="popupAccount"></span></label>
+        <select id="account"></select>
+        <label for="visibility"><span data-i18n="popupVisibility"></span></label>
+        <select id="visibility">
+          <option value="public">public</option>
+          <option value="home">home</option>
+          <option value="followers">followers</option>
+          <option value="specified">specified</option>
+        </select>
+        <label for="cw"><span data-i18n="popupCw"></span></label>
+        <input id="cw" type="text" />
+        <button type="button" id="post" data-i18n="popupPost"></button>
+      </div>
+    </details>
+
+    <p id="status" class="muted"></p>
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>

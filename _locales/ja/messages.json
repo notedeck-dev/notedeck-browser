@@ -1,0 +1,57 @@
+{
+  "extName": { "message": "NoteDeck" },
+  "extDescription": {
+    "message": "ページ・リンク・選択範囲を NoteDeck 経由で Misskey に投稿し、Misskey のノートやユーザーを NoteDeck で開きます。"
+  },
+  "cmdComposePage": { "message": "このページを入れて NoteDeck の投稿フォームを開く" },
+  "menuComposePage": { "message": "このページを NoteDeck で投稿" },
+  "menuComposeSelection": { "message": "選択範囲を NoteDeck で投稿" },
+  "menuComposeLink": { "message": "このリンクを NoteDeck で投稿" },
+  "menuComposeImage": { "message": "この画像の URL を NoteDeck で投稿" },
+  "menuOpenLink": { "message": "リンク先を NoteDeck で開く" },
+  "menuOpenPage": { "message": "このページを NoteDeck で開く" },
+  "omniboxDescription": { "message": "NoteDeck の投稿フォームを開く: %text%" },
+  "notifyTitle": { "message": "NoteDeck" },
+  "notifyNotMisskeyUrl": { "message": "Misskey のノートやユーザーの URL ではありません。" },
+  "notifyTokenRequired": {
+    "message": "ユーザーを開くには API トークンが要ります。拡張機能のオプションで設定してください。"
+  },
+  "popupPostTitle": { "message": "NoteDeck で投稿" },
+  "popupOpenInNoteDeck": { "message": "NoteDeck で開く" },
+  "popupOpenPostForm": { "message": "投稿フォームを開く" },
+  "popupPost": { "message": "投稿" },
+  "popupPosting": { "message": "NoteDeck のウィンドウで投稿を確認してください…" },
+  "popupPosted": { "message": "投稿しました。" },
+  "popupUseSelection": { "message": "選択範囲を使う" },
+  "popupUsePage": { "message": "ページのタイトルと URL を使う" },
+  "popupAccount": { "message": "アカウント" },
+  "popupVisibility": { "message": "公開範囲" },
+  "popupCw": { "message": "注釈 (任意)" },
+  "popupNoToken": {
+    "message": "直接投稿するには API トークンが要ります。「投稿フォームを開く」はトークンなしで使えます。"
+  },
+  "popupOptions": { "message": "オプション" },
+  "optionsTitle": { "message": "NoteDeck のオプション" },
+  "optionsBaseUrl": { "message": "NoteDeck API の URL" },
+  "optionsBaseUrlHelp": {
+    "message": "NoteDeck 内蔵の HTTP API の URL。ポートを変えた、または開発版を使っているとき以外は既定のままにします。"
+  },
+  "optionsToken": { "message": "API トークン" },
+  "optionsTokenHelp": {
+    "message": "NoteDeck の 設定 → 権限 → API トークン で発行します。名前を「browser」にしておくと、NoteDeck 側の確認にどこからの要求か出ます。直接投稿とユーザーを開くときだけ要り、それ以外は notedeck:// リンクで動きます。"
+  },
+  "optionsSave": { "message": "保存" },
+  "optionsSaved": { "message": "保存しました。" },
+  "optionsCheck": { "message": "接続を確認" },
+  "optionsConnected": { "message": "接続できました。アカウント: %accounts%" },
+  "optionsNoAccounts": { "message": "接続できましたが、NoteDeck にアカウントがありません。" },
+  "errUnreachable": { "message": "NoteDeck が起動していません (または API の URL が違います)。" },
+  "errUnauthorized": {
+    "message": "API トークンが無効です。NoteDeck の 設定 → 権限 → API トークン で発行してください。"
+  },
+  "errPermissionDenied": {
+    "message": "外部アプリには許可されていない操作です。設定 → 権限 → 外部アプリ で許可してください。"
+  },
+  "errCancelled": { "message": "NoteDeck 側でキャンセルされました。" },
+  "errEmpty": { "message": "本文が空です。" }
+}

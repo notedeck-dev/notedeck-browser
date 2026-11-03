@@ -1,0 +1,115 @@
+body {
+  width: 340px;
+  margin: 0;
+  padding: 12px;
+  font:
+    13px system-ui,
+    sans-serif;
+  color: #222;
+  background: #fff;
+}
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+header a {
+  font-size: 12px;
+  color: #666;
+}
+textarea,
+input,
+select {
+  width: 100%;
+  box-sizing: border-box;
+  font: inherit;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+textarea {
+  resize: vertical;
+}
+.row {
+  display: flex;
+  gap: 8px;
+  margin: 8px 0;
+}
+.row > * {
+  flex: 1;
+}
+button {
+  font: inherit;
+  padding: 7px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #f6f6f6;
+  cursor: pointer;
+}
+button.primary {
+  background: #86b300;
+  border-color: #86b300;
+  color: #fff;
+  font-weight: 600;
+}
+button.link {
+  background: none;
+  border: none;
+  color: #555;
+  padding: 2px;
+  font-size: 12px;
+  text-decoration: underline;
+}
+button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+details {
+  margin-top: 8px;
+  border-top: 1px solid #eee;
+  padding-top: 8px;
+}
+summary {
+  cursor: pointer;
+  color: #555;
+}
+label {
+  display: block;
+  margin: 6px 0;
+}
+label span {
+  display: block;
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 2px;
+}
+.muted {
+  color: #666;
+  font-size: 12px;
+  margin: 8px 0 0;
+  min-height: 1em;
+}
+#open-section {
+  margin-bottom: 8px;
+}
+#open-section button {
+  width: 100%;
+}
+@media (prefers-color-scheme: dark) {
+  body {
+    color: #eee;
+    background: #202020;
+  }
+  textarea,
+  input,
+  select,
+  button {
+    background: #2a2a2a;
+    color: #eee;
+    border-color: #444;
+  }
+  details {
+    border-color: #333;
+  }
+}

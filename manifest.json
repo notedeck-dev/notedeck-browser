@@ -1,0 +1,42 @@
+{
+  "manifest_version": 3,
+  "name": "__MSG_extName__",
+  "description": "__MSG_extDescription__",
+  "version": "0.1.0",
+  "default_locale": "en",
+  "icons": {
+    "16": "icons/16.png",
+    "32": "icons/32.png",
+    "48": "icons/48.png",
+    "128": "icons/128.png"
+  },
+  "action": {
+    "default_title": "__MSG_extName__",
+    "default_popup": "src/popup.html",
+    "default_icon": {
+      "16": "icons/16.png",
+      "32": "icons/32.png"
+    }
+  },
+  "options_ui": {
+    "page": "src/options.html",
+    "open_in_tab": false
+  },
+  "background": {
+    "service_worker": "src/background.js",
+    "type": "module"
+  },
+  "omnibox": {
+    "keyword": "nd"
+  },
+  "permissions": ["contextMenus", "storage", "activeTab", "scripting", "notifications"],
+  "host_permissions": ["http://127.0.0.1/*", "http://localhost/*"],
+  "commands": {
+    "compose-page": {
+      "suggested_key": {
+        "default": "Alt+Shift+N"
+      },
+      "description": "__MSG_cmdComposePage__"
+    }
+  }
+}

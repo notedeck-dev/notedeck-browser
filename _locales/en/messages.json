@@ -1,0 +1,51 @@
+{
+  "extName": { "message": "NoteDeck" },
+  "extDescription": {
+    "message": "Post pages, links and selections to Misskey through NoteDeck, and open Misskey notes and users in NoteDeck."
+  },
+  "cmdComposePage": { "message": "Open NoteDeck's post form with this page" },
+  "menuComposePage": { "message": "Post this page via NoteDeck" },
+  "menuComposeSelection": { "message": "Post selection via NoteDeck" },
+  "menuComposeLink": { "message": "Post this link via NoteDeck" },
+  "menuComposeImage": { "message": "Post this image's URL via NoteDeck" },
+  "menuOpenLink": { "message": "Open link in NoteDeck" },
+  "menuOpenPage": { "message": "Open this page in NoteDeck" },
+  "omniboxDescription": { "message": "Open NoteDeck's post form with: %text%" },
+  "notifyTitle": { "message": "NoteDeck" },
+  "notifyNotMisskeyUrl": { "message": "This is not a Misskey note or user URL." },
+  "notifyTokenRequired": { "message": "Opening a user needs an API token. Set one in the extension options." },
+  "popupPostTitle": { "message": "Post via NoteDeck" },
+  "popupOpenInNoteDeck": { "message": "Open in NoteDeck" },
+  "popupOpenPostForm": { "message": "Open post form" },
+  "popupPost": { "message": "Post" },
+  "popupPosting": { "message": "Confirm the post in the NoteDeck window…" },
+  "popupPosted": { "message": "Posted." },
+  "popupUseSelection": { "message": "Use selection" },
+  "popupUsePage": { "message": "Use page title and URL" },
+  "popupAccount": { "message": "Account" },
+  "popupVisibility": { "message": "Visibility" },
+  "popupCw": { "message": "Content warning (optional)" },
+  "popupNoToken": { "message": "Posting directly needs an API token. The post form button works without one." },
+  "popupOptions": { "message": "Options" },
+  "optionsTitle": { "message": "NoteDeck options" },
+  "optionsBaseUrl": { "message": "NoteDeck API URL" },
+  "optionsBaseUrlHelp": {
+    "message": "Base URL of NoteDeck's built-in HTTP API. Leave the default unless you changed the port or run a development build."
+  },
+  "optionsToken": { "message": "API token" },
+  "optionsTokenHelp": {
+    "message": "Issued in NoteDeck: Settings → Permissions → API tokens. Name it \"browser\" so NoteDeck shows where requests come from. Only needed for posting directly and for opening users; everything else works through notedeck:// links."
+  },
+  "optionsSave": { "message": "Save" },
+  "optionsSaved": { "message": "Saved." },
+  "optionsCheck": { "message": "Check connection" },
+  "optionsConnected": { "message": "Connected. Accounts: %accounts%" },
+  "optionsNoAccounts": { "message": "Connected, but NoteDeck has no accounts." },
+  "errUnreachable": { "message": "NoteDeck is not running (or the API URL is wrong)." },
+  "errUnauthorized": { "message": "Invalid API token. Issue one in NoteDeck: Settings → Permissions → API tokens." },
+  "errPermissionDenied": {
+    "message": "Not allowed for external tools. Allow it under Settings → Permissions → External."
+  },
+  "errCancelled": { "message": "Cancelled in NoteDeck." },
+  "errEmpty": { "message": "Text is empty." }
+}

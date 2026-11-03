@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="popup.css" />
+    <style>
+      body {
+        width: 420px;
+      }
+    </style>
+  </head>
+  <body>
+    <header><strong data-i18n="optionsTitle"></strong></header>
+    <label for="baseUrl"><span data-i18n="optionsBaseUrl"></span></label>
+    <input id="baseUrl" type="url" placeholder="http://127.0.0.1:19820" />
+    <p class="muted" data-i18n="optionsBaseUrlHelp"></p>
+    <label for="token"><span data-i18n="optionsToken"></span></label>
+    <input id="token" type="password" autocomplete="off" />
+    <p class="muted" data-i18n="optionsTokenHelp"></p>
+    <div class="row">
+      <button type="button" id="save" class="primary" data-i18n="optionsSave"></button>
+      <button type="button" id="check" data-i18n="optionsCheck"></button>
+    </div>
+    <p id="status" class="muted"></p>
+    <script type="module" src="options.js"></script>
+  </body>
+</html>
