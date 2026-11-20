@@ -10,7 +10,10 @@
   "menuComposeImage": { "message": "この画像の URL を NoteDeck で投稿" },
   "menuOpenLink": { "message": "リンク先を NoteDeck で開く" },
   "menuOpenPage": { "message": "このページを NoteDeck で開く" },
-  "omniboxDescription": { "message": "NoteDeck の投稿フォームを開く: %text%" },
+  "omniboxDescription": {
+    "message": "NoteDeck の投稿フォームを開く: $TEXT$",
+    "placeholders": { "text": { "content": "$1" } }
+  },
   "notifyTitle": { "message": "NoteDeck" },
   "notifyNotMisskeyUrl": { "message": "Misskey のノートやユーザーの URL ではありません。" },
   "notifyTokenRequired": {
@@ -33,6 +36,9 @@
   "popupOptions": { "message": "オプション" },
   "optionsTitle": { "message": "NoteDeck のオプション" },
   "optionsBaseUrl": { "message": "NoteDeck API の URL" },
+  "optionsBaseUrlInvalid": {
+    "message": "API の URL は http://127.0.0.1:<ポート> か http://localhost:<ポート> にしてください。"
+  },
   "optionsBaseUrlHelp": {
     "message": "NoteDeck 内蔵の HTTP API の URL。ポートを変えた、または開発版を使っているとき以外は既定のままにします。"
   },
@@ -43,7 +49,10 @@
   "optionsSave": { "message": "保存" },
   "optionsSaved": { "message": "保存しました。" },
   "optionsCheck": { "message": "接続を確認" },
-  "optionsConnected": { "message": "接続できました。アカウント: %accounts%" },
+  "optionsConnected": {
+    "message": "接続できました。アカウント: $ACCOUNTS$",
+    "placeholders": { "accounts": { "content": "$1" } }
+  },
   "optionsNoAccounts": { "message": "接続できましたが、NoteDeck にアカウントがありません。" },
   "errUnreachable": { "message": "NoteDeck が起動していません (または API の URL が違います)。" },
   "errUnauthorized": {
@@ -53,5 +62,6 @@
     "message": "外部アプリには許可されていない操作です。設定 → 権限 → 外部アプリ で許可してください。"
   },
   "errCancelled": { "message": "NoteDeck 側でキャンセルされました。" },
+  "errBadResponse": { "message": "想定外の応答です。NoteDeck API の URL を確認してください。" },
   "errEmpty": { "message": "本文が空です。" }
 }

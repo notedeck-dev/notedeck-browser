@@ -1,5 +1,5 @@
 import { accountLabel, describeError, listAccounts } from "./api.js";
-import { DEFAULT_BASE_URL, loadSettings, saveSettings } from "./settings.js";
+import { DEFAULT_BASE_URL, isLoopbackUrl, loadSettings, saveSettings } from "./settings.js";
 
 const m = (k, subs) => chrome.i18n.getMessage(k, subs);
 const $ = (id) => /** @type {HTMLInputElement} */ (document.getElementById(id));
@@ -16,19 +16,21 @@ const setStatus = (s) => {
 };
 
 async function save() {
-  await saveSettings({
-    baseUrl: $("baseUrl").value.trim().replace(/\/+$/, "") || DEFAULT_BASE_URL,
-    token: $("token").value.trim(),
-  });
+  const baseUrl = $("baseUrl").value.trim().replace(/\/+$/, "") || DEFAULT_BASE_URL;
+  if (!isLoopbackUrl(baseUrl)) {
+    setStatus(m("optionsBaseUrlInvalid"));
+    return false;
+  }
+  await saveSettings({ baseUrl, token: $("token").value.trim() });
+  return true;
 }
 
 $("save").addEventListener("click", async () => {
-  await save();
-  setStatus(m("optionsSaved"));
+  if (await save()) setStatus(m("optionsSaved"));
 });
 
 $("check").addEventListener("click", async () => {
-  await save();
+  if (!(await save())) return;
   try {
     const accounts = await listAccounts();
     setStatus(accounts.length ? m("optionsConnected", accounts.map(accountLabel).join(", ")) : m("optionsNoAccounts"));

@@ -10,7 +10,10 @@
   "menuComposeImage": { "message": "Post this image's URL via NoteDeck" },
   "menuOpenLink": { "message": "Open link in NoteDeck" },
   "menuOpenPage": { "message": "Open this page in NoteDeck" },
-  "omniboxDescription": { "message": "Open NoteDeck's post form with: %text%" },
+  "omniboxDescription": {
+    "message": "Open NoteDeck's post form with: $TEXT$",
+    "placeholders": { "text": { "content": "$1" } }
+  },
   "notifyTitle": { "message": "NoteDeck" },
   "notifyNotMisskeyUrl": { "message": "This is not a Misskey note or user URL." },
   "notifyTokenRequired": { "message": "Opening a user needs an API token. Set one in the extension options." },
@@ -29,6 +32,9 @@
   "popupOptions": { "message": "Options" },
   "optionsTitle": { "message": "NoteDeck options" },
   "optionsBaseUrl": { "message": "NoteDeck API URL" },
+  "optionsBaseUrlInvalid": {
+    "message": "The API URL must be http://127.0.0.1:<port> or http://localhost:<port>."
+  },
   "optionsBaseUrlHelp": {
     "message": "Base URL of NoteDeck's built-in HTTP API. Leave the default unless you changed the port or run a development build."
   },
@@ -39,7 +45,10 @@
   "optionsSave": { "message": "Save" },
   "optionsSaved": { "message": "Saved." },
   "optionsCheck": { "message": "Check connection" },
-  "optionsConnected": { "message": "Connected. Accounts: %accounts%" },
+  "optionsConnected": {
+    "message": "Connected. Accounts: $ACCOUNTS$",
+    "placeholders": { "accounts": { "content": "$1" } }
+  },
   "optionsNoAccounts": { "message": "Connected, but NoteDeck has no accounts." },
   "errUnreachable": { "message": "NoteDeck is not running (or the API URL is wrong)." },
   "errUnauthorized": { "message": "Invalid API token. Issue one in NoteDeck: Settings → Permissions → API tokens." },
@@ -47,5 +56,6 @@
     "message": "Not allowed for external tools. Allow it under Settings → Permissions → External."
   },
   "errCancelled": { "message": "Cancelled in NoteDeck." },
+  "errBadResponse": { "message": "Unexpected response. Check the NoteDeck API URL." },
   "errEmpty": { "message": "Text is empty." }
 }

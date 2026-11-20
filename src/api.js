@@ -36,7 +36,8 @@ async function request(method, path, body) {
     // 接続できない = NoteDeck が起動していない (または URL / ポート違い)
     throw new NoteDeckApiError(0, "unreachable", e instanceof Error ? e.message : String(e));
   }
-  const data = await res.json().catch(() => ({}));
+  const parsed = await res.json().catch(() => null);
+  const data = parsed && typeof parsed === "object" ? parsed : {};
   if (!res.ok) {
     const code = typeof data.code === "string" ? data.code : res.status === 401 ? "unauthorized" : "http_error";
     const message = typeof data.error === "string" ? data.error : `HTTP ${res.status}`;
@@ -54,10 +55,12 @@ async function request(method, path, body) {
  */
 export async function execute(capabilityId, params) {
   const data = await request("POST", `/api/capabilities/${encodeURIComponent(capabilityId)}/execute`, params ?? {});
+  // NoteDeck 以外が 200 を返した (URL / ポート違い) ときに undefined を返さない
+  if (data.result === undefined) throw new NoteDeckApiError(200, "bad_response", "no result");
   return data.result;
 }
 
-/** @returns {Promise<Array<{ id: string, host: string, username: string, displayName: string | null }>>} */
+/** @returns {Promise<Array<{ id: string, host: string, userId: string, username: string, displayName: string | null, hasToken: boolean }>>} */
 export function listAccounts() {
   return execute("account.list");
 }
@@ -95,6 +98,8 @@ export function describeError(e) {
       return `${m("errPermissionDenied")} ${e.message}`;
     case "user_cancelled":
       return m("errCancelled");
+    case "bad_response":
+      return m("errBadResponse");
     default:
       return `NoteDeck: ${e.code}: ${e.message}`;
   }

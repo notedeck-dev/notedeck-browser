@@ -1,7 +1,7 @@
-import { accountLabel, createNote, describeError, listAccounts } from "./api.js";
+import { accountLabel, describeError, listAccounts } from "./api.js";
 import { composeLink, composeText, parseMisskeyUrl } from "./links.js";
 import { openDeepLink } from "./open.js";
-import { loadSettings, saveSettings } from "./settings.js";
+import { loadSettings } from "./settings.js";
 
 const m = (k) => chrome.i18n.getMessage(k);
 const $ = (id) => /** @type {HTMLElement} */ (document.getElementById(id));
@@ -89,24 +89,17 @@ async function loadAccounts() {
 $("post").addEventListener("click", async () => {
   const text = textEl.value.trim();
   if (!text) return setStatus(m("errEmpty"));
-  const button = /** @type {HTMLButtonElement} */ ($("post"));
-  button.disabled = true;
-  setStatus(m("popupPosting"));
   const accountId = /** @type {HTMLSelectElement} */ ($("account")).value;
   const cw = /** @type {HTMLInputElement} */ ($("cw")).value.trim();
-  try {
-    await createNote({
+  // 投稿は background が行い、結果は通知で届く (確認で NoteDeck にフォーカスが移るとポップアップは閉じる)
+  await chrome.runtime.sendMessage({
+    type: "create-note",
+    params: {
       text,
       cw: cw || undefined,
       visibility: /** @type {HTMLSelectElement} */ ($("visibility")).value,
       accountId,
-    });
-    await saveSettings({ accountId });
-    setStatus(m("popupPosted"));
-    textEl.value = "";
-  } catch (e) {
-    setStatus(describeError(e));
-  } finally {
-    button.disabled = false;
-  }
+    },
+  });
+  setStatus(m("popupPosting"));
 });

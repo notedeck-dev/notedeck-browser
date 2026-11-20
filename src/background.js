@@ -1,7 +1,7 @@
-import { describeError, lookupUser } from "./api.js";
-import { composeLink, composeText, noteLink, parseMisskeyUrl, userLink } from "./links.js";
+import { createNote, describeError, listAccounts, lookupUser } from "./api.js";
+import { composeLink, composeText, noteLink, parseMisskeyUrl, userLink, userLookupTarget } from "./links.js";
 import { openDeepLink } from "./open.js";
-import { loadSettings } from "./settings.js";
+import { loadSettings, saveSettings } from "./settings.js";
 
 const m = (k, subs) => chrome.i18n.getMessage(k, subs);
 
@@ -67,12 +67,14 @@ export async function openMisskeyUrl(url, tabId) {
   const { token, accountId } = await loadSettings();
   if (!token) return notify(m("notifyTokenRequired"));
   try {
+    const target = userLookupTarget(parsed, await listAccounts(), accountId);
+    if (!target) return notify(m("optionsNoAccounts"));
     const user = await lookupUser({
       username: parsed.username,
-      host: parsed.userHost ?? undefined,
-      accountId: accountId || undefined,
+      host: target.host,
+      accountId: target.account.id,
     });
-    await openDeepLink(userLink(parsed.host, user.id), tabId);
+    await openDeepLink(userLink(target.account.host, user.id, target.account.userId), tabId);
   } catch (e) {
     notify(describeError(e));
   }
@@ -80,10 +82,37 @@ export async function openMisskeyUrl(url, tabId) {
 
 // ポップアップからの「このページを NoteDeck で開く」
 chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
+  if (msg?.type === "create-note") {
+    void postNote(msg.params);
+    sendResponse(true);
+    return false;
+  }
   if (msg?.type !== "open-misskey-url") return false;
-  openMisskeyUrl(msg.url, msg.tabId).then(() => sendResponse(true));
+  openMisskeyUrl(msg.url, msg.tabId).then(
+    () => sendResponse(true),
+    () => sendResponse(false),
+  );
   return true;
 });
+
+/**
+ * ポップアップからの直接投稿。NoteDeck 側の確認でフォーカスが移るとポップアップは閉じるので、
+ * ここで待って結果を通知で知らせる。
+ * @param {{ text: string, cw?: string, visibility?: string, accountId?: string }} params
+ */
+async function postNote(params) {
+  // 確認待ちの間に service worker がアイドルで止められないよう、拡張 API を呼んでタイマーを戻す
+  const keepAlive = setInterval(() => void chrome.runtime.getPlatformInfo(), 20_000);
+  try {
+    await createNote(params);
+    await saveSettings({ accountId: params.accountId });
+    notify(m("popupPosted"));
+  } catch (e) {
+    notify(describeError(e));
+  } finally {
+    clearInterval(keepAlive);
+  }
+}
 
 function notify(message) {
   chrome.notifications.create({
