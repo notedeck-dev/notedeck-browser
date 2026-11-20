@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <title data-i18n="popupPostTitle"></title>
     <link rel="stylesheet" href="popup.css" />
   </head>
   <body>
@@ -14,7 +15,7 @@
       <button type="button" id="open-in-notedeck" class="primary" data-i18n="popupOpenInNoteDeck"></button>
     </section>
 
-    <textarea id="text" rows="6" aria-label="text"></textarea>
+    <textarea id="text" rows="6"></textarea>
     <div class="row">
       <button type="button" id="use-page" class="link" data-i18n="popupUsePage"></button>
       <button type="button" id="use-selection" class="link" data-i18n="popupUseSelection"></button>
@@ -32,10 +33,9 @@
         <select id="account"></select>
         <label for="visibility"><span data-i18n="popupVisibility"></span></label>
         <select id="visibility">
-          <option value="public">public</option>
-          <option value="home">home</option>
-          <option value="followers">followers</option>
-          <option value="specified">specified</option>
+          <option value="public" data-i18n="popupVisPublic"></option>
+          <option value="home" data-i18n="popupVisHome"></option>
+          <option value="followers" data-i18n="popupVisFollowers"></option>
         </select>
         <label for="cw"><span data-i18n="popupCw"></span></label>
         <input id="cw" type="text" />

@@ -6,11 +6,13 @@ import { loadSettings } from "./settings.js";
 const m = (k) => chrome.i18n.getMessage(k);
 const $ = (id) => /** @type {HTMLElement} */ (document.getElementById(id));
 
+document.documentElement.lang = chrome.i18n.getUILanguage();
 for (const el of document.querySelectorAll("[data-i18n]")) {
   el.textContent = m(el.getAttribute("data-i18n"));
 }
 
 const textEl = /** @type {HTMLTextAreaElement} */ ($("text"));
+textEl.setAttribute("aria-label", m("popupText"));
 const statusEl = $("status");
 const setStatus = (s) => {
   statusEl.textContent = s;

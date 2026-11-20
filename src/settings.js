@@ -18,6 +18,7 @@ export function isLoopbackUrl(input) {
 
 /** @returns {Promise<{ baseUrl: string, token: string, accountId: string }>} */
 export async function loadSettings() {
+  /** @type {Partial<{ baseUrl: string, token: string, accountId: string }>} */
   const s = await chrome.storage.local.get(["baseUrl", "token", "accountId"]);
   return {
     baseUrl: (s.baseUrl || DEFAULT_BASE_URL).replace(/\/+$/, ""),

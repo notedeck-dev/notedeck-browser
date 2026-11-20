@@ -1,6 +1,8 @@
 // notedeck:// リンクを開く。ページ側で location を書き換えるのが一番確実で、
 // 外部プロトコルへの遷移はページを置き換えないのでタブはそのまま残る。
-// それができないタブ (chrome:// など) では新しいタブで開く。
+// それができないタブ (chrome:// など) ではタブの URL として開く (これもページは残る)。
+// 起点のタブが無いときだけ新しいタブで開く (空のタブが残る)。
+// NoteDeck が入っていないと何も起きないが、プロトコルの登録の有無は拡張からは分からない。
 
 /**
  * @param {string} url notedeck:// リンク
@@ -19,6 +21,12 @@ export async function openDeepLink(url, tabId) {
       return;
     } catch {
       // 注入できないページ (chrome:// / ストア / PDF ビューア) は下へ
+    }
+    try {
+      await chrome.tabs.update(tabId, { url });
+      return;
+    } catch {
+      // タブが閉じられた等
     }
   }
   await chrome.tabs.create({ url });

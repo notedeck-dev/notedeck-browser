@@ -37,9 +37,41 @@ export function deepLink(path, params) {
   return `notedeck://${path}${q ? `?${q}` : ""}`;
 }
 
+// Windows の Chromium は 2048 文字を超える外部プロトコルの URL を開かないので、余裕を見た上限
+export const MAX_LINK_LENGTH = 2000;
+
+/**
+ * `text + tail` を載せた compose リンクが上限に収まるよう text の末尾を切り、切ったら … を付ける。
+ * 長さはエンコード後で決まる (日本語は 1 文字 9 バイト分) ので、収まる文字数を二分探索する。
+ * @param {string} text
+ * @param {string} tail
+ */
+function clip(text, tail) {
+  const fits = (t) => deepLink("compose", { text: t + tail }).length <= MAX_LINK_LENGTH;
+  if (fits(text)) return text;
+  const chars = Array.from(text);
+  let lo = 0;
+  let hi = chars.length;
+  while (lo < hi) {
+    const mid = Math.ceil((lo + hi) / 2);
+    if (fits(`${chars.slice(0, mid).join("")}…`)) lo = mid;
+    else hi = mid - 1;
+  }
+  return `${chars.slice(0, lo).join("")}…`;
+}
+
 /** @param {string} text */
 export function composeLink(text) {
-  return deepLink("compose", { text });
+  return deepLink("compose", { text: clip(text, "") });
+}
+
+/**
+ * 選択範囲を、後ろに続く URL ごとリンクに収まる長さにする (URL を削らないよう選択範囲の側を切る)。
+ * @param {string} selection
+ * @param {string | undefined} url
+ */
+export function clipSelection(selection, url) {
+  return clip(selection.trim(), url ? `\n${url}` : "");
 }
 
 /** @param {{ kind: "note", host: string, id: string }} note */
@@ -89,4 +121,25 @@ export function composeText({ title, url, selection }) {
   if (t && !sel) parts.push(t);
   if (url) parts.push(url);
   return parts.join("\n");
+}
+
+/**
+ * 右クリックメニューから投稿フォームに渡す本文。投稿フォーム以外のメニューは null。
+ * @param {string | number} menuItemId
+ * @param {{ pageUrl?: string, selectionText?: string, linkUrl?: string, srcUrl?: string }} info
+ * @param {string | undefined} title
+ */
+export function menuComposeText(menuItemId, info, title) {
+  switch (menuItemId) {
+    case "compose-page":
+      return composeText({ title, url: info.pageUrl });
+    case "compose-selection":
+      return composeText({ selection: clipSelection(info.selectionText ?? "", info.pageUrl), url: info.pageUrl });
+    case "compose-link":
+      return composeText({ url: info.linkUrl });
+    case "compose-image":
+      return composeText({ url: info.srcUrl });
+    default:
+      return null;
+  }
 }

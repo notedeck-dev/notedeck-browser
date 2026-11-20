@@ -3,6 +3,9 @@
 // 拡張機能は host_permissions があれば CORS の制約を受けない。
 import { loadSettings } from "./settings.js";
 
+// 人の確認を待たない呼び出しの上限。リモートユーザーの照会は相手サーバーへの問い合わせを含む
+const READ_TIMEOUT_MS = 15_000;
+
 export class NoteDeckApiError extends Error {
   /** @param {number} status @param {string} code @param {string} message */
   constructor(status, code, message) {
@@ -18,9 +21,10 @@ export class NoteDeckApiError extends Error {
  * @param {"GET" | "POST"} method
  * @param {string} path
  * @param {unknown} [body]
+ * @param {number} [timeoutMs] 無ければ待ち続ける
  * @returns {Promise<T>}
  */
-async function request(method, path, body) {
+async function request(method, path, body, timeoutMs) {
   const { baseUrl, token } = await loadSettings();
   let res;
   try {
@@ -31,8 +35,10 @@ async function request(method, path, body) {
         ...(body !== undefined ? { "Content-Type": "application/json" } : {}),
       },
       body: body !== undefined ? JSON.stringify(body) : undefined,
+      signal: timeoutMs !== undefined ? AbortSignal.timeout(timeoutMs) : undefined,
     });
   } catch (e) {
+    if (e instanceof Error && e.name === "TimeoutError") throw new NoteDeckApiError(0, "timeout", e.message);
     // 接続できない = NoteDeck が起動していない (または URL / ポート違い)
     throw new NoteDeckApiError(0, "unreachable", e instanceof Error ? e.message : String(e));
   }
@@ -51,10 +57,16 @@ async function request(method, path, body) {
  * @template T
  * @param {string} capabilityId
  * @param {Record<string, unknown>} [params]
+ * @param {number} [timeoutMs]
  * @returns {Promise<T>}
  */
-export async function execute(capabilityId, params) {
-  const data = await request("POST", `/api/capabilities/${encodeURIComponent(capabilityId)}/execute`, params ?? {});
+export async function execute(capabilityId, params, timeoutMs) {
+  const data = await request(
+    "POST",
+    `/api/capabilities/${encodeURIComponent(capabilityId)}/execute`,
+    params ?? {},
+    timeoutMs,
+  );
   // NoteDeck 以外が 200 を返した (URL / ポート違い) ときに undefined を返さない
   if (data.result === undefined) throw new NoteDeckApiError(200, "bad_response", "no result");
   return data.result;
@@ -62,10 +74,13 @@ export async function execute(capabilityId, params) {
 
 /** @returns {Promise<Array<{ id: string, host: string, userId: string, username: string, displayName: string | null, hasToken: boolean }>>} */
 export function listAccounts() {
-  return execute("account.list");
+  return execute("account.list", undefined, READ_TIMEOUT_MS);
 }
 
-/** @param {{ text: string, cw?: string, visibility?: string, accountId?: string }} params */
+/**
+ * NoteDeck 側の確認ダイアログを待つので timeout は付けない。
+ * @param {{ text: string, cw?: string, visibility?: string, accountId?: string }} params
+ */
 export function createNote(params) {
   return execute("notes.create", params);
 }
@@ -76,7 +91,7 @@ export function createNote(params) {
  * @returns {Promise<{ id: string }>}
  */
 export function lookupUser(params) {
-  return execute("user.lookup", params);
+  return execute("user.lookup", params, READ_TIMEOUT_MS);
 }
 
 /** @param {{ id: string, host: string, username: string, displayName: string | null }} a */
@@ -87,11 +102,13 @@ export function accountLabel(a) {
 
 /** 人向けのエラー文 (i18n 済み) */
 export function describeError(e) {
-  const m = (k) => chrome.i18n.getMessage(k);
+  const m = (k, subs) => chrome.i18n.getMessage(k, subs);
   if (!(e instanceof NoteDeckApiError)) return `NoteDeck: ${e instanceof Error ? e.message : String(e)}`;
   switch (e.code) {
     case "unreachable":
       return m("errUnreachable");
+    case "timeout":
+      return m("errTimeout");
     case "unauthorized":
       return m("errUnauthorized");
     case "permission_denied":
@@ -100,6 +117,13 @@ export function describeError(e) {
       return m("errCancelled");
     case "bad_response":
       return m("errBadResponse");
+    case "unknown_capability":
+      return m("errUnknownCapability");
+    case "preflight_failed":
+      return m("errPreflightFailed", e.message);
+    case "execute_failed":
+    case "query_failed":
+      return m("errExecuteFailed", e.message);
     default:
       return `NoteDeck: ${e.code}: ${e.message}`;
   }

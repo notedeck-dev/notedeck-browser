@@ -4,6 +4,7 @@ import { DEFAULT_BASE_URL, isLoopbackUrl, loadSettings, saveSettings } from "./s
 const m = (k, subs) => chrome.i18n.getMessage(k, subs);
 const $ = (id) => /** @type {HTMLInputElement} */ (document.getElementById(id));
 
+document.documentElement.lang = chrome.i18n.getUILanguage();
 for (const el of document.querySelectorAll("[data-i18n]")) {
   el.textContent = m(el.getAttribute("data-i18n"));
 }

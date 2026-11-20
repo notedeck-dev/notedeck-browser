@@ -1,8 +1,11 @@
 import { describe, expect, it } from "vitest";
 import {
+  clipSelection,
   composeLink,
   composeText,
   deepLink,
+  MAX_LINK_LENGTH,
+  menuComposeText,
   noteLink,
   parseMisskeyUrl,
   userLink,
@@ -102,5 +105,45 @@ describe("composeText", () => {
     expect(composeText({ title: "T", url: "https://x" })).toBe("T\nhttps://x");
     expect(composeText({ url: "https://x" })).toBe("https://x");
     expect(composeText({})).toBe("");
+  });
+});
+
+describe("リンクの長さの上限", () => {
+  it("短い本文はそのまま", () => {
+    expect(clipSelection("quoted", "https://x")).toBe("quoted");
+    expect(composeLink("hello")).toBe("notedeck://compose?text=hello");
+  });
+  it("長い選択範囲は URL を残して切り詰め、末尾に … を付ける", () => {
+    const url = "https://example.com/page";
+    const clipped = clipSelection("あ".repeat(5000), url);
+    expect(clipped.endsWith("…")).toBe(true);
+    expect(clipped.length).toBeLessThan(5000);
+    const link = composeLink(composeText({ selection: clipped, url }));
+    expect(link.length).toBeLessThanOrEqual(MAX_LINK_LENGTH);
+    expect(new URL(link).searchParams.get("text")).toBe(`${clipped}\n${url}`);
+    // 上限いっぱいまで使う (1 文字 = 9 バイト分)
+    expect(link.length).toBeGreaterThan(MAX_LINK_LENGTH - 10);
+  });
+  it("composeLink は長すぎる本文の末尾を切り詰める", () => {
+    const link = composeLink("a".repeat(5000));
+    expect(link.length).toBeLessThanOrEqual(MAX_LINK_LENGTH);
+    expect(new URL(link).searchParams.get("text")?.endsWith("…")).toBe(true);
+  });
+  it("サロゲートペアの途中で切らない", () => {
+    const text = new URL(composeLink("😀".repeat(1000))).searchParams.get("text") ?? "";
+    expect(text).toMatch(/^(😀)+…$/u);
+  });
+});
+
+describe("menuComposeText", () => {
+  const info = { pageUrl: "https://p", selectionText: "sel", linkUrl: "https://l", srcUrl: "https://i" };
+  it("メニューごとの本文", () => {
+    expect(menuComposeText("compose-page", info, "Title")).toBe("Title\nhttps://p");
+    expect(menuComposeText("compose-selection", info, "Title")).toBe("sel\nhttps://p");
+    expect(menuComposeText("compose-link", info, "Title")).toBe("https://l");
+    expect(menuComposeText("compose-image", info, "Title")).toBe("https://i");
+  });
+  it("投稿フォーム以外のメニューは null", () => {
+    expect(menuComposeText("open-link", info, "Title")).toBeNull();
   });
 });

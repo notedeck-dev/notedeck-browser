@@ -16,6 +16,13 @@
   },
   "notifyTitle": { "message": "NoteDeck" },
   "notifyNotMisskeyUrl": { "message": "Misskey のノートやユーザーの URL ではありません。" },
+  "notifyNoAccountOnHost": {
+    "message": "NoteDeck に $HOST$ のアカウントが無いので、このノートは開けません。",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "notifyPostUnknown": {
+    "message": "投稿の結果を確認できませんでした。投稿されたかどうかは NoteDeck で確認してください。"
+  },
   "notifyTokenRequired": {
     "message": "ユーザーを開くには API トークンが要ります。拡張機能のオプションで設定してください。"
   },
@@ -27,6 +34,10 @@
   "popupPosted": { "message": "投稿しました。" },
   "popupUseSelection": { "message": "選択範囲を使う" },
   "popupUsePage": { "message": "ページのタイトルと URL を使う" },
+  "popupText": { "message": "本文" },
+  "popupVisPublic": { "message": "パブリック" },
+  "popupVisHome": { "message": "ホーム" },
+  "popupVisFollowers": { "message": "フォロワー" },
   "popupAccount": { "message": "アカウント" },
   "popupVisibility": { "message": "公開範囲" },
   "popupCw": { "message": "注釈 (任意)" },
@@ -35,6 +46,12 @@
   },
   "popupOptions": { "message": "オプション" },
   "optionsTitle": { "message": "NoteDeck のオプション" },
+  "optionsIntro": {
+    "message": "設定なしで使えます: 右クリックやツールバーのボタンから NoteDeck の投稿フォームを開く、Misskey のノートを NoteDeck で開く。"
+  },
+  "optionsIntroToken": {
+    "message": "API トークン (下) が要ります: ツールバーのポップアップから直接投稿する、Misskey のユーザーを NoteDeck で開く。"
+  },
   "optionsBaseUrl": { "message": "NoteDeck API の URL" },
   "optionsBaseUrlInvalid": {
     "message": "API の URL は http://127.0.0.1:<ポート> か http://localhost:<ポート> にしてください。"
@@ -55,6 +72,18 @@
   },
   "optionsNoAccounts": { "message": "接続できましたが、NoteDeck にアカウントがありません。" },
   "errUnreachable": { "message": "NoteDeck が起動していません (または API の URL が違います)。" },
+  "errTimeout": { "message": "NoteDeck から時間内に応答がありませんでした。" },
+  "errUnknownCapability": {
+    "message": "この NoteDeck は、この操作に対応していません。NoteDeck を更新してください。"
+  },
+  "errPreflightFailed": {
+    "message": "NoteDeck が要求を受け付けませんでした: $DETAIL$",
+    "placeholders": { "detail": { "content": "$1" } }
+  },
+  "errExecuteFailed": {
+    "message": "NoteDeck で操作を完了できませんでした: $DETAIL$",
+    "placeholders": { "detail": { "content": "$1" } }
+  },
   "errUnauthorized": {
     "message": "API トークンが無効です。NoteDeck の 設定 → 権限 → API トークン で発行してください。"
   },
